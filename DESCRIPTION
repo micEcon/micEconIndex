@@ -1,0 +1,12 @@
+Package: micEconIndex
+Version: 0.1-1
+Date: 2016/07/12
+Title: Price and Quantity Indeces
+Author: Arne Henningsen
+Maintainer: Arne Henningsen <arne.henningsen@gmail.com>
+Depends: R (>= 2.4.0)
+Imports: miscTools (>= 0.6-1)
+Suggests: Ecdat (>= 0.1-5), micEcon (>= 0.6-12)
+Description: Tools for calculating various price and quantity indeces.
+License: GPL (>= 2)
+URL: http://www.micEcon.org
