@@ -1,5 +1,5 @@
 micEconIndex <- function( prices, quantities, base, data, method, na.rm,
-   weights ) {
+   weights, EKS = FALSE ) {
 
    if( length( prices ) != length( quantities ) ) {
       stop( "arguments 'prices' and 'quantities' must have the same length" )
@@ -70,7 +70,8 @@ micEconIndex <- function( prices, quantities, base, data, method, na.rm,
          weightData$obsNo <- NULL
          attributes( result )$weights <- weightData
       }
-   } else if( method == "Fisher" ) {
+   } else if( method == "Fisher" & ! EKS ) {
+
       pL <- priceIndex( prices, quantities, base, data, method = "Laspeyres",
          na.rm = na.rm, weights )
       pP <- priceIndex( prices, quantities, base, data, method = "Paasche",
@@ -81,6 +82,10 @@ micEconIndex <- function( prices, quantities, base, data, method, na.rm,
             0.5 * attributes( pL )$weights +
             0.5 * attributes( pP )$weights
       }
+    } else if( method == "Fisher" & EKS ) {
+        result <- fisherEKS(quantities, prices, data)
+        # Counterintuitively, quants and prices are reversed because
+        # of the way quantityIndex() is called
    } else {
       stop( "argument 'method' must be either 'Laspeyres', 'Paasche'",
          " or 'Fisher'" )
@@ -95,20 +100,49 @@ priceIndex <- function( prices, quantities, base, data,
    checkNames( c( prices, quantities ), names( data ) )
 
    result <- micEconIndex( prices, quantities, base, data, method, na.rm,
-      weights )
+      weights, EKS = FALSE   )
 
    return( result )
 }
 
 quantityIndex <- function( prices, quantities, base, data,
-   method = "Laspeyres", na.rm = FALSE, weights = FALSE ) {
+   method = "Laspeyres", na.rm = FALSE, weights = FALSE, EKS = FALSE ) {
 
    checkNames( c( prices, quantities ), names( data ) )
 
    result <- micEconIndex( quantities, prices, base, data, method, na.rm,
-      weights )
+      weights, EKS = EKS )
 
    return( result )
 }
 
 
+# consolMatrix <- function(x) {
+#   if (!is.data.table(x)) x <- as.data.table(x)
+#   xRet <- x[, .(.N), by = names(x)]
+#   nRet <- matrix(xRet$N, ncol = 1)
+#   xRet[, N := NULL]
+#   list(mat = as.matrix(xRet), freq = nRet)
+# }
+
+
+
+fisherEKS <- function( prices, quantities, data) {
+
+    if (all(!duplicated(data[, prices])) & all(!duplicated(data[, quantities]))) {
+
+      ret <- fisherEKSdense(
+        as.matrix(data[, quantities]),
+        as.matrix(data[, prices]),
+        matrix(rep(1, nrow(data)), ncol = 1),
+        matrix(rep(1, nrow(data)), ncol = 1),
+        1:nrow(data) - 1, # zero indexing of C++
+        1:nrow(data) - 1
+      )
+
+    } else {
+      stop("TODO")
+    }
+
+   return(as.vector(ret))
+}
