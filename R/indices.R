@@ -85,6 +85,11 @@ micEconIndex <- function( prices, quantities, base, data, method, na.rm,
       stop( "argument 'method' must be either 'Laspeyres', 'Paasche'",
          " or 'Fisher'" )
    }
+   # convert NaNs to NAs (so that the output is the same on Linux and Windows)
+   result[ is.na( result ) ] <- NA
+   if( !is.null( attributes( result )$weights ) ) {
+     attributes( result )$weights[ is.na( attributes( result )$weights ) ] <- NA
+   }
    names( result ) <- rownames( data )
    return( result )
 }
