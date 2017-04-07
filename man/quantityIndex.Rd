@@ -7,7 +7,7 @@
 }
 
 \usage{quantityIndex( prices, quantities, base, data, method = "Laspeyres",
-   na.rm = FALSE, weights = FALSE, EKS = FALSE )}
+   na.rm = FALSE, weights = FALSE )}
 
 \arguments{
    \item{prices}{Vector that contains the names of the prices.}
@@ -20,7 +20,6 @@
       calculating the \code{base}.}
    \item{weights}{logical. Should an attribute 'weights' that contains the
       relatives weights of each quantity be added?}
-  \item{EKS}{logical. TODO}
 }
 
 \details{

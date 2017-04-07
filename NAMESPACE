@@ -1,8 +1,4 @@
-
 export( "priceIndex" )
 export( "quantityIndex" )
 
 importFrom( "miscTools", "checkNames" )
-importFrom("Rcpp", "evalCpp")
-import("data.table")
-useDynLib(micEconIndex)
