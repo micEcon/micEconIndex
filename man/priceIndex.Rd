@@ -48,6 +48,7 @@
 \author{Arne Henningsen}
 
 \examples{
+if( requireNamespace( 'micEcon', quietly = TRUE ) ) {
    data( Missong03E7.7, package = "micEcon" )
    # Laspeyres Price Indices
    priceIndex( c( "p.beef", "p.veal", "p.pork" ),
@@ -63,6 +64,7 @@
    # Paasche Price Indices
    priceIndex( c( "p.A", "p.B", "p.C", "p.D" ), c("q.A", "q.B", "q.C", "q.D" ),
       1, Bleymueller79E25.1, "Paasche" )
+}
 }
 
 \keyword{models}
